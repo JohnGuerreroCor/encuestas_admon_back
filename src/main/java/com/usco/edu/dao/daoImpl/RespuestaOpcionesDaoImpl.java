@@ -28,26 +28,28 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 
 	@Override
 	public List<RespuestaOpciones> find(int uaa) {
-		
+
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("uaa", uaa);
 
 		String sql = "select * from encuestas.respuestas_opciones ro "
-				+ "where ro.rop_estado = 1 order by ro.rop_codigo desc";
+				+ "where ro.rop_estado = 1 and uaa_codigo = :uaa order by ro.rop_codigo desc";
 
-		List<RespuestaOpciones> lstRespuestaOpciones = namedJdbcTemplate.query(sql, parameter, new RowMapper<RespuestaOpciones>() {
+		List<RespuestaOpciones> lstRespuestaOpciones = namedJdbcTemplate.query(sql, parameter,
+				new RowMapper<RespuestaOpciones>() {
 
-			@Override
-			public RespuestaOpciones mapRow(ResultSet rs, int rowNum) throws SQLException {
+					@Override
+					public RespuestaOpciones mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-				RespuestaOpciones respuestaOpciones = new RespuestaOpciones();
-				respuestaOpciones.setCodigo(rs.getLong("rop_codigo"));
-				respuestaOpciones.setDescripcion(rs.getString("rop_descripcion"));
+						RespuestaOpciones respuestaOpciones = new RespuestaOpciones();
+						respuestaOpciones.setCodigo(rs.getLong("rop_codigo"));
+						respuestaOpciones.setDescripcion(rs.getString("rop_descripcion"));
+						respuestaOpciones.setUaa(rs.getInt("uaa_codigo"));
 
-				return respuestaOpciones;
-			}
+						return respuestaOpciones;
+					}
 
-		});
+				});
 
 		return lstRespuestaOpciones;
 
@@ -59,7 +61,7 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", codigo);
 
-		String sql = "SELECT * from encuestas.respuestas_opciones ro where ro.rop_estado =1 AND ro.rop_codigo=:codigo";
+		String sql = "SELECT * from encuestas.respuestas_opciones ro where ro.rop_estado = 1 AND ro.rop_codigo=:codigo";
 
 		List<RespuestaOpciones> lstRespuestaOpciones = namedJdbcTemplate.query(sql, parameter,
 				new RowMapper<RespuestaOpciones>() {
@@ -70,6 +72,7 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 						RespuestaOpciones respuestaOpciones = new RespuestaOpciones();
 						respuestaOpciones.setCodigo(rs.getLong("rop_codigo"));
 						respuestaOpciones.setDescripcion(rs.getString("rop_descripcion"));
+						respuestaOpciones.setUaa(rs.getInt("uaa_codigo"));
 
 						return respuestaOpciones;
 					}
@@ -82,7 +85,7 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 	@Override
 	public void create(RespuestaOpciones respuestaOpciones, String userdb) {
 
-		String sql = "INSERT INTO encuestas.respuestas_opciones (rop_descripcion) VALUES(:descripcion)";
+		String sql = "INSERT INTO encuestas.respuestas_opciones (rop_descripcion,uaa_codigo) VALUES(:descripcion,:uaa)";
 
 		DataSource dataSource = jdbcComponent.construirDataSourceDeUsuario(userdb);
 		NamedParameterJdbcTemplate jdbc = jdbcComponent.construirTemplatenew(dataSource);
@@ -90,6 +93,7 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 		try {
 			MapSqlParameterSource parameter = new MapSqlParameterSource();
 			parameter.addValue("descripcion", respuestaOpciones.getDescripcion());
+			parameter.addValue("uaa", respuestaOpciones.getUaa());
 
 			jdbc.update(sql, parameter);
 		} catch (Exception e) {
@@ -153,7 +157,7 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", codigo);
 
-		String sql = "UPDATE encuestas.respuestas_opciones SET  rop_estado=0 WHERE rop_codigo=:codigo";
+		String sql = "UPDATE encuestas.respuestas_opciones SET rop_estado=0 WHERE rop_codigo=:codigo";
 
 		jdbc.update(sql, parameter);
 

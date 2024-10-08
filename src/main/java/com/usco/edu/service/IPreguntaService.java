@@ -1,6 +1,12 @@
 package com.usco.edu.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.usco.edu.entities.Pregunta;
 
@@ -25,5 +31,9 @@ public interface IPreguntaService {
 	List<Pregunta> findByCueAdmin(int cues);
 
 	List<Pregunta> findByCuestAndTipoRespuestaRadiobOrSelect(int cues);
+
+	String subirImagenPregunta(MultipartFile file, Long perCodigo, int uaa, String userdb, HttpServletRequest request);
+
+	ByteArrayInputStream mirarImagenPregunta(long archivoCodigo, String userdb, HttpServletResponse response);
 
 }

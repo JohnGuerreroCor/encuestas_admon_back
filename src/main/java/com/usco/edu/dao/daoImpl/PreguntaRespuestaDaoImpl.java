@@ -34,7 +34,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 	@Override
 	public List<PreguntaRespuestas> find() {
 
-		String sql = "SELECT prr_codigo, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende, pr.tre_codigo,"
+		String sql = "SELECT prr_codigo, pre_texto_adicional, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende, pr.tre_codigo,"
 				+ "tre_nombre,rop_descripcion,pre_descripcion FROM encuestas.preguntas_respuestas pr join encuestas.preguntas p on"
 				+ " pr.pre_codigo =p.pre_codigo join encuestas.respuestas_opciones ro on pr.rop_codigo =ro.rop_codigo join"
 				+ " encuestas.tipo_respuestas tr on pr.tre_codigo =tr.tre_codigo where pr.prr_estado =1";
@@ -56,6 +56,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 						Pregunta pregunta = new Pregunta();
 						pregunta.setCodigo(rs.getLong("pre_codigo"));
 						pregunta.setDescripcion(rs.getString("pre_descripcion"));
+						pregunta.setTextoAdicional(rs.getString("pre_texto_adicional"));
 
 						PreguntaRespuestas preguntaRespuestas = new PreguntaRespuestas();
 						preguntaRespuestas.setCodigo(rs.getLong("prr_codigo"));
@@ -79,7 +80,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", codigo);
 
-		String sql = "SELECT prr_codigo, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende,"
+		String sql = "SELECT prr_codigo, pre_texto_adicional, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende,"
 				+ "  pr.tre_codigo,tre_nombre,rop_descripcion,pre_descripcion FROM encuestas.preguntas_respuestas pr join encuestas.preguntas p on"
 				+ "  pr.pre_codigo =p.pre_codigo full join encuestas.respuestas_opciones ro on pr.rop_codigo =ro.rop_codigo full join encuestas.tipo_respuestas "
 				+ " tr on pr.tre_codigo =tr.tre_codigo where pr.prr_estado =1 AND p.cue_codigo = :codigo";
@@ -101,6 +102,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 						Pregunta pregunta = new Pregunta();
 						pregunta.setCodigo(rs.getLong("pre_codigo"));
 						pregunta.setDescripcion(rs.getString("pre_descripcion"));
+						pregunta.setTextoAdicional(rs.getString("pre_texto_adicional"));
 
 						PreguntaRespuestas preguntaRespuestas = new PreguntaRespuestas();
 						preguntaRespuestas.setCodigo(rs.getLong("prr_codigo"));
@@ -124,7 +126,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", codigo);
 
-		String sql = "SELECT prr_codigo, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende, pr.tre_codigo,"
+		String sql = "SELECT prr_codigo, pre_texto_adicional, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende, pr.tre_codigo,"
 				+ "tre_nombre,rop_descripcion,pre_descripcion FROM encuestas.preguntas_respuestas pr join encuestas.preguntas p on"
 				+ " pr.pre_codigo =p.pre_codigo full join encuestas.respuestas_opciones ro on pr.rop_codigo =ro.rop_codigo join"
 				+ " encuestas.tipo_respuestas tr on pr.tre_codigo =tr.tre_codigo where pr.prr_estado =1 AND prr_codigo=:codigo";
@@ -146,6 +148,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 						Pregunta pregunta = new Pregunta();
 						pregunta.setCodigo(rs.getLong("pre_codigo"));
 						pregunta.setDescripcion(rs.getString("pre_descripcion"));
+						pregunta.setTextoAdicional(rs.getString("pre_texto_adicional"));
 
 						PreguntaRespuestas preguntaRespuestas = new PreguntaRespuestas();
 						preguntaRespuestas.setCodigo(rs.getLong("prr_codigo"));
@@ -290,7 +293,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", codigo);
 
-		String sql = "SELECT prr_codigo, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende,"
+		String sql = "SELECT prr_codigo, pre_texto_adicional, pr.rop_codigo, pr.pre_codigo, prr_estado, prr_descripcion_adicional, pr.pre_codigo_depende,"
 				+ " rop_descripcion,pre_descripcion FROM encuestas.preguntas_respuestas pr right join encuestas.preguntas p on pr.pre_codigo =p.pre_codigo "
 				+ "full join encuestas.respuestas_opciones ro on pr.rop_codigo =ro.rop_codigo  where  p.pre_codigo =:codigo AND pr.prr_estado =1";
 
@@ -307,6 +310,7 @@ public class PreguntaRespuestaDaoImpl implements IPreguntaRespuestasDao {
 						Pregunta pregunta = new Pregunta();
 						pregunta.setCodigo(rs.getLong("pre_codigo"));
 						pregunta.setDescripcion(rs.getString("pre_descripcion"));
+						pregunta.setTextoAdicional(rs.getString("pre_texto_adicional"));
 
 						PreguntaRespuestas preguntaRespuestas = new PreguntaRespuestas();
 						preguntaRespuestas.setCodigo(rs.getLong("prr_codigo"));

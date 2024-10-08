@@ -1,16 +1,28 @@
 package com.usco.edu.restController;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usco.edu.entities.Pregunta;
 import com.usco.edu.exception.ModelNotFoundException;
 import com.usco.edu.service.IPreguntaService;
@@ -88,4 +100,35 @@ public class PreguntaRestController {
 
 		return service.findByCuestAndTipoRespuestaRadiobOrSelect(cues);
 	}
+
+	@PostMapping("subir-imagen-pregunta/{user}/{perCodigo}/{uaa}")
+	public void subirImagenPregunta(@PathVariable String user, @PathVariable Long perCodigo, @PathVariable int uaa,
+			@RequestPart MultipartFile archivo, HttpServletRequest request, @RequestParam String json) {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		Pregunta pregunta;
+		try {
+			pregunta = objectMapper.readValue(json, Pregunta.class);
+			pregunta.setDescripcion(service.subirImagenPregunta(archivo, perCodigo, uaa, user, request));
+			service.create(pregunta, user);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@GetMapping("mirar-imagen/{codigo}/{user}")
+	public ResponseEntity<InputStreamResource> mirarImagenPregunta(@PathVariable Long codigo, @PathVariable String user,
+			HttpServletResponse response) throws Exception {
+		ByteArrayInputStream stream = service.mirarImagenPregunta(codigo, user, response);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Disposition", "attachment; filename=\" ImagenPregunta.png\"");
+
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+
+	}
+
 }

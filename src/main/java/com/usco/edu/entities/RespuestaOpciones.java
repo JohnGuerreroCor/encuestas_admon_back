@@ -10,12 +10,9 @@ import lombok.NoArgsConstructor;
 public class RespuestaOpciones implements Serializable {
 
 	private Long codigo;
-
 	private String descripcion;
-	
 	private int estado;
-	/**
-	 * 
-	 */
+	private int uaa;
+	
 	private static final long serialVersionUID = 1L;
 }
